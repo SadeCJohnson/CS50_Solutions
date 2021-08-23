@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico'/>
+    <link rel="stylesheet" href="../style/google_styles.css">
+    <title>Image Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+    <a href="../index.html" class="home_lnk">Google Search</a>
+    <img src="title_images.gif" alt="Google Images Beta" class="g_logo" width="301" height="120">
+    </div>
+
+
+    <div class="row">
+        <form action="https://www.google.com/search" class="form">
+            <!-- NOTE: we are allowed to have multiple input tags
+             that are tied and gets submitted as one request-->
+            <input type="text" name="q" class="search">
+            <!-- NOTE: hidden types do alter the query string without having to appear-->
+            <input type="hidden" name="tbm" value="isch">
+            <div class="row">
+            <input type="submit" class="butt" value="Google Image Search">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

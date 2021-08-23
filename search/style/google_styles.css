@@ -1,0 +1,57 @@
+.g_logo {
+    margin-top: 50px;
+    margin-left: 375px;
+    display: block;
+    position: fixed;
+}
+
+.form{
+    margin-left: 400px;
+    margin-top: 175px;
+}
+
+.butt{
+    border-radius: 4px;
+    cursor: -webkit-grab; cursor: grab;
+    margin-left: 10px;
+}
+
+
+.form_stack {
+  display: flex;
+  flex-direction: column;
+  margin-right: 100px;
+  border-radius: 6px;
+}
+
+.txt{
+    margin-right: 100px;
+}
+
+.img_lnk{
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 18px;
+}
+
+
+.adv_lnk{
+  position: absolute;
+  top: 8px;
+  right: 150px;
+  font-size: 18px;
+}
+
+
+.home_lnk{
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 18px;
+}
+
+
+.search{
+    border-radius: 6px;
+}
