@@ -11,6 +11,7 @@
 }
 
 .butt{
+    margin-top: 10px;
     border-radius: 4px;
     cursor: -webkit-grab; cursor: grab;
     margin-left: 10px;
