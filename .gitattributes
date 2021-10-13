@@ -1,2 +1,2 @@
-*.css linguist-detectable=false
 *.sql linguist-detectable=true
+*.css linguist-detectable=true
