@@ -13,3 +13,17 @@ WHERE  movies.year IN ( 2004 )
 GROUP  BY people.id
 ORDER  BY people.birth,
           people.NAME;
+
+
+-- ASIDE: write a query to show duplicate people.id that were getting collapsed by "group by" clause above
+-- TECHNIQUE: {5,5,6,8} - {5,6,8} = {5}
+SELECT people.id,
+count(*)
+FROM   people
+       JOIN stars
+         ON people.id = stars.person_id
+       JOIN movies
+         ON movies.id = stars.movie_id
+WHERE  movies.year IN ( 2004 )
+GROUP BY people.id
+ORDER  BY count(*) DESC
