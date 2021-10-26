@@ -2,15 +2,14 @@
 -- Your query should output a table with a single column for the name of each person.
 -- There may be multiple people named Kevin Bacon in the database. Be sure to only select the Kevin Bacon born in 1958.
 -- Kevin Bacon himself should not be included in the resulting list.
-SELECT -- people.id,
-       people.NAME
-       -- movies.title
+SELECT
+       DISTINCT(people.NAME)
 FROM   people
        JOIN stars
          ON people.id = stars.person_id
        JOIN movies
          ON stars.movie_id = movies.id
-WHERE  movies.title IN (SELECT movies.title
+WHERE  movies.id IN (SELECT movies.id
                         FROM   people
                                JOIN stars
                                  ON people.id = stars.person_id
@@ -18,5 +17,5 @@ WHERE  movies.title IN (SELECT movies.title
                                  ON stars.movie_id = movies.id
                         WHERE  people.NAME = 'Kevin Bacon'
                                AND people.birth = 1958)
-GROUP  BY people.id
-ORDER  BY people.id
+AND people.name IS NOT 'Kevin Bacon'
+ORDER  BY people.name ASC
