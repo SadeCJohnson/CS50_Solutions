@@ -28,3 +28,8 @@ and minute = 15;
 -- RESULTS
 -- id=459, year=2020, month=7, day=31, hour=10,	minute=15, activity=exit, license plate=11J91FW
 -------------------------
+select * from people where license_plate = '11J91FW';
+------------------------
+-- RESULTS
+-- id=37552, name=Noah,	phone_number=(959)-555-4871, passport_number=1095374669, license_plate=11J91FW
+-------------------------
