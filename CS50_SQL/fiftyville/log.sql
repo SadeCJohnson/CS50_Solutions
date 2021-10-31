@@ -179,3 +179,31 @@ ORDER  BY license_plate;
 --396669	Elizabeth(829) 555-5269	7049073643	L93JTIZ
 --325548	Brandon	(771) 555-6667	7874488539	R3G7486
 -------------------------------------------------------------------------
+-- Reasoning: we have list of suspects but require more context.
+-- Recall that 'crime_scene_reports' mentioned there exists 3 transcriptions from witnesses
+SELECT *
+FROM   interviews
+WHERE  transcript LIKE '%thief%'
+       AND month = 7
+       AND day = 28
+       AND year = 2020;
+
+------------------------------------------------------------------------
+-- RESULTS:
+--[id, name, year, month, day, transcript]
+-- 161	Ruth	2020	7	28	Sometime within ten minutes of the theft,
+-- I saw the thief get into a car in the courthouse parking lot and drive away.
+-- If you have security footage from the courthouse parking lot,
+-- you might want to look for cars that left the parking lot in that time frame.
+
+--[id, name, year, month, day, transcript]
+-- 162	Eugene	2020	7	28	I don't know the thief's name, but it was someone I recognized.
+-- Earlier this morning, before I arrived at the courthouse,
+-- I was walking by the ATM on Fifer Street and saw the thief there withdrawing some money.
+
+--[id, name, year, month, day, transcript]
+-- 163	Raymond	2020	7	28	As the thief was leaving the courthouse,
+-- they called someone who talked to them for less than a minute.
+-- In the call, I heard the thief say that they were planning to take the earliest flight out of Fiftyville tomorrow.
+-- The thief then asked the person on the other end of the phone to purchase the flight ticket.
+-------------------------------------------------------------------------
