@@ -226,3 +226,16 @@ WHERE  people.license_plate IN (SELECT people.license_plate
                                         OR NAME = 'Eugene')
 ORDER  BY month,
           day;
+------------------------------------------------------------------------
+-- RESULTS: Based on their license plates, how could any one of these folks be a witness if they never stepped
+-- foot into the courthouse on July, 28th 2020?? One plausible reason if they took another means of transportation not
+-- picked up by the courthouse_security_logs. This is surely negligible as their testimony has greater importance than
+-- their date of appearance. Probably something that could be tweaked to give the story more validity.
+--[year, month, day, hour, minute, activity, license plate, name]
+--2020	7	26	13	22	entrance	47592FJ	Eugene
+--2020	7	26	17	27	exit	    47592FJ	Eugene
+--2020	7	29	11	44	entrance	Y18DLY3	Raymond
+--2020	7	29	13	11	exit	    Y18DLY3	Raymond
+--2020	7	30	8	53	entrance	47592FJ	Eugene
+--2020	7	30	15	45	exit	    47592FJ	Eugene
+-------------------------------------------------------------------------
