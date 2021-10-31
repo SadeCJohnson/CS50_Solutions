@@ -1,5 +1,12 @@
 -- Keep a log of any SQL queries you execute as you solve the mystery.
 
+------------------------
+-- RELATIONSHIPS BETWEEN TABLES
+-- bank_accounts (person_id is foreign key) -> people
+-- flights (origin_airport_id is foreign key & destination_airport_id is foreign key) -> airports, airports
+-- passengers (flight_id is foreign key) -> flights
+------------------------
+
 
 -- Initial starting point!
 SELECT description
