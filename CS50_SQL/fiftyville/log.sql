@@ -13,3 +13,11 @@ WHERE  street = 'Chamberlin Street'
 -- Theft of the CS50 duck took place at 10:15am at the Chamberlin Street courthouse.
 -- Interviews were conducted today with three witnesses who were present at the time — each of their interview transcripts mentions the courthouse.
 -------------------------
+
+select * from courthouse_security_logs
+where hour = 10
+and minute = 15;
+------------------------
+-- RESULTS
+-- id=459, year=2020, month=7, day=31, hour=10,	minute=15, activity=exit, license plate=11J91FW
+-------------------------
