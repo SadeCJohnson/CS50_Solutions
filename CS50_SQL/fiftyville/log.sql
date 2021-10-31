@@ -56,7 +56,7 @@ ORDER  BY license_plate;
 
 ------------------------------------------------------------------------
 -- RESULTS:
---id    year  mo.   day hr. min. activity   lic. plate
+--[id, year, month, day, hour, minute, activity, license plate]
 --243	2020	7	28	8	42	entrance	0NTHK55
 --237	2020	7	28	8	34	entrance	1106N58
 --259	2020	7	28	10	14	entrance	13FNH73
@@ -114,16 +114,16 @@ ORDER  BY license_plate;
 
 ------------------------------------------------------------------------
 -- CONFIRMATION RESULTS:
---id    year  mo.   day hr. min. activity   lic. plate
+--[id, year, month, day, hour, minute, activity, license plate]
 --267	2020	7	28	10	23	  exit      0NTHK55
 --268	2020	7	28	10	35	  exit      1106N58
 --288	2020	7	28	17	15	  exit	    13FNH73
 --266	2020	7	28	10	23	  exit	    322W7JE
 --263	2020	7	28	10	19	  exit	    4328GD8
---260	2020	7	28	10	16	  exit    	5P2BI95
---262	2020	7	28	10	18	  exit    	6P58WS2
---261	2020	7	28	10	18	  exit    	94KL13X
---264	2020	7	28	10	20	  exit    	G412CB7
---265	2020	7	28	10	21	  exit    	L93JTIZ
+--260	2020	7	28	10	16	  exit      5P2BI95
+--262	2020	7	28	10	18	  exit      6P58WS2
+--261	2020	7	28	10	18	  exit      94KL13X
+--264	2020	7	28	10	20	  exit      G412CB7
+--265	2020	7	28	10	21	  exit      L93JTIZ
 --290	2020	7	28	17	18	  exit	    R3G7486
 -------------------------------------------------------------------------
