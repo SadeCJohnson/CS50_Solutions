@@ -30,6 +30,17 @@ and minute = 15;
 -------------------------
 select * from people where license_plate = '11J91FW';
 ------------------------
--- RESULTS
+-- RESULTS: so Noah is the ony person to left the courthouse at the hour of 10:15 but this occurred 3 days after the crime so there's something wrong here!
 -- id=37552, name=Noah,	phone_number=(959)-555-4871, passport_number=1095374669, license_plate=11J91FW
+-------------------------
+
+SELECT *
+FROM   phone_calls
+WHERE  caller = '(959) 555-4871'
+       AND month = 7
+       AND day = 31;
+
+------------------------
+-- RESULTS
+-- id=494, caller=(959) 555-4871, receiver=(839) 555-1757, year=2020, month=7, day=31, duration=257
 -------------------------
