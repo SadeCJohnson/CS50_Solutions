@@ -20,3 +20,20 @@ WHERE  street = 'Chamberlin Street'
 -- Theft of the CS50 duck took place at 10:15am at the Chamberlin Street courthouse.
 -- Interviews were conducted today with three witnesses who were present at the time — each of their interview transcripts mentions the courthouse.
 -------------------------
+
+SELECT *
+FROM   courthouse_security_logs
+WHERE  month = 7
+       AND day = 28
+       AND hour <= 10
+       AND activity = 'entrance'
+EXCEPT
+SELECT *
+FROM   courthouse_security_logs
+WHERE  month = 7
+       AND day = 28
+       AND hour >= 10
+       AND minute > 14
+       AND activity = 'entrance';
+------------------------
+-- RESULTS: this is a listing of all those who entered the courthouse prior to 10:15am on July 28th ... need to minus those who have exited before that time to reduce scope
