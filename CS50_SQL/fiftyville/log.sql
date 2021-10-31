@@ -207,3 +207,22 @@ WHERE  transcript LIKE '%thief%'
 -- In the call, I heard the thief say that they were planning to take the earliest flight out of Fiftyville tomorrow.
 -- The thief then asked the person on the other end of the phone to purchase the flight ticket.
 -------------------------------------------------------------------------
+
+SELECT courthouse_security_logs.year,
+       courthouse_security_logs.month,
+       courthouse_security_logs.day,
+       courthouse_security_logs.hour,
+       courthouse_security_logs.minute,
+       activity,
+       courthouse_security_logs.license_plate,
+       people.NAME
+FROM   courthouse_security_logs
+       INNER JOIN people
+               ON people.license_plate = courthouse_security_logs.license_plate
+WHERE  people.license_plate IN (SELECT people.license_plate
+                                FROM   people
+                                WHERE  NAME = 'Raymond'
+                                        OR NAME = 'Ruth'
+                                        OR NAME = 'Eugene')
+ORDER  BY month,
+          day;
