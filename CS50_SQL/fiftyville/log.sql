@@ -239,3 +239,11 @@ ORDER  BY month,
 --2020	7	30	8	53	entrance	47592FJ	Eugene
 --2020	7	30	15	45	exit	        47592FJ	Eugene
 -------------------------------------------------------------------------
+
+-- KEY NOTES:
+-- (1) thief took earliest flight out of Fiftyville on 7/29/2020
+-- (2) talked to accomplice for less than 1 minute
+-- (3) accomplice transferred money to the thief to pay for ticket,
+-- so his bank account had a withdrawal = to plane ticket price and
+-- thief had a deposit on same day = accomplice's withdrawal amount = plane ticket price
+
