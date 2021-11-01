@@ -243,12 +243,11 @@ ORDER  BY month,
 -- KEY NOTES:
 -- (1) thief took earliest flight out of Fiftyville on 7/29/2020
 -- (2) talked to accomplice for less than 1 minute
--- (3) accomplice transferred money to the thief to pay for ticket,
--- so his bank account had a withdrawal = to plane ticket price and
--- thief had a deposit on same day = accomplice's withdrawal amount = plane ticket price
--- (4) left within 10 min after the theft at 10:15am
+-- (3) accomplice purchased flight ticket for thief
+-- (4) thief withdrew from the ATM on Fifer Street
+-- (5) left within 10 min after the theft at 10:15am
 
--- With given clues, we can simplify query above:
+-- With given clues, we can simplify query above on lines 76 - 113:
 SELECT *
 FROM   courthouse_security_logs
 WHERE  activity = 'exit'
@@ -259,7 +258,7 @@ WHERE  activity = 'exit'
        AND minute <= 25;
 
 ------------------------------------------------------------------------
---s RESULTS:
+--RESULTS:
 --[id, year, month, day, hour, minute, activity, license plate]
 --260	2020	7	28	10	16	exit	5P2BI95
 --261	2020	7	28	10	18	exit	94KL13X
@@ -271,3 +270,39 @@ WHERE  activity = 'exit'
 --267	2020	7	28	10	23	exit	0NTHK55
 -------------------------------------------------------------------------
 
+-- This query was formulated on the tip that the thief called someone
+-- for less than a minute
+SELECT people.NAME,
+       passport_number,
+       phone_calls.caller,
+       phone_calls.receiver,
+       year,
+       day,
+       month,
+       duration
+FROM   phone_calls
+       INNER JOIN people
+               ON people.phone_number = phone_calls.caller
+WHERE  caller IN (SELECT phone_number
+                  FROM   people
+                  WHERE  license_plate IN (SELECT license_plate
+                                           FROM   courthouse_security_logs
+                                           WHERE  activity = 'exit'
+                                                  AND month = 7
+                                                  AND day = 28
+                                                  AND hour = 10
+                                                  AND minute >= 15
+                                                  AND minute <= 25))
+       AND year = 2020
+       AND month = 7
+       AND day = 28
+       AND duration < 60;
+
+------------------------------------------------------------------------
+--RESULTS: when we uncover thief, we shall backtrack here as the accomplice is receiver!
+--[name, passport, caller, receiver, year, month, day, durationn]
+--Roger 	1695452385	(130) 555-0289	(996) 555-8899	2020	28	7	51
+--Evelyn	8294398571	(499) 555-9472	(892) 555-8872	2020	28	7	36
+--Ernest	5773159633	(367) 555-5533	(375) 555-8161	2020	28	7	45
+--Evelyn	8294398571	(499) 555-9472	(717) 555-1342	2020	28	7	50
+--Russell	3592750733	(770) 555-1861	(725) 555-3243	2020	28	7	49
