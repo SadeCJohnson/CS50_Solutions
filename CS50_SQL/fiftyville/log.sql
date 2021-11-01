@@ -300,9 +300,32 @@ WHERE  caller IN (SELECT phone_number
 
 ------------------------------------------------------------------------
 --RESULTS: when we uncover thief, we shall backtrack here as the accomplice is receiver!
---[name, passport, caller, receiver, year, month, day, durationn]
+--[name, passport, caller, receiver, year, month, day, duration]
 --Roger 	1695452385	(130) 555-0289	(996) 555-8899	2020	28	7	51
 --Evelyn	8294398571	(499) 555-9472	(892) 555-8872	2020	28	7	36
 --Ernest	5773159633	(367) 555-5533	(375) 555-8161	2020	28	7	45
 --Evelyn	8294398571	(499) 555-9472	(717) 555-1342	2020	28	7	50
 --Russell	3592750733	(770) 555-1861	(725) 555-3243	2020	28	7	49
+
+------------------------------------------------------------------------
+-- This query was formulated on the tip that the thief withdrew on Fifer Street
+-- on the day of the crime
+SELECT *
+FROM   atm_transactions
+WHERE  year = 2020
+       AND month = 7
+       AND day = 28
+       AND transaction_type = 'withdraw'
+       AND atm_location = 'Fifer Street' ;
+
+------------------------------------------------------------------------
+--RESULTS: when we uncover thief, we shall backtrack here as the accomplice is receiver!
+--[id, account_number, year, month, day, atm_location, transaction_type, amount]
+--246	28500762	2020	7	28	Fifer Street	withdraw	48
+--264	28296815	2020	7	28	Fifer Street	withdraw	20
+--266	76054385	2020	7	28	Fifer Street	withdraw	60
+--267	49610011	2020	7	28	Fifer Street	withdraw	50
+--269	16153065	2020	7	28	Fifer Street	withdraw	80
+--288	25506511	2020	7	28	Fifer Street	withdraw	20
+--313	81061156	2020	7	28	Fifer Street	withdraw	30
+--336	26013199	2020	7	28	Fifer Street	withdraw	35
