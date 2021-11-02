@@ -397,3 +397,45 @@ WHERE  origin_airport_id = 8
 -- 18	8	6	2020	7	29	16	0	8	CSF	Fiftyville Regional Airport	Fiftyville	18	3592750733	4C	514354	Russell	(770) 555-1861	3592750733	322W7JE
 -- 36	8	4	2020	7	29	8	20	8	CSF	Fiftyville Regional Airport	Fiftyville	36	5773159633	4A	686048	Ernest	(367) 555-5533	5773159633	94KL13X
 ------------------------------------------------------------------------
+
+-- Given that Ernest took the earliest flight out of Fiftyville on 7/29 and he aligns to all the witness testimonies
+-- he seems to be the thief who stole the CS50 Duck!
+
+------------------------------------------------------------------------
+-- query to get destination city
+
+SELECT *
+FROM   (SELECT flights.year,
+               flights.month,
+               flights.day,
+               flights.hour,
+               flights.minute,
+               flights.origin_airport_id,
+               airports.full_name AS "Origin Airport",
+               airports.city      AS "Origin City",
+               flights.destination_airport_id,
+               people.passport_number,
+               people.NAME,
+               people.phone_number
+        FROM   flights
+               INNER JOIN airports
+                       ON airports.id = flights.origin_airport_id
+               -- on airports.id = flights.destination_airport_id
+               INNER JOIN passengers
+                       ON passengers.flight_id = flights.id
+               INNER JOIN people
+                       ON people.passport_number = passengers.passport_number
+        WHERE  origin_airport_id = 8
+               AND year = 2020
+               AND month = 7
+               AND day = 29
+               AND people.NAME IN ( 'Russell', 'Ernest' ))
+       INNER JOIN airports
+               ON destination_airport_id = airports.id
+WHERE  NAME = 'Ernest'
+
+------------------------------------------------------------------------
+--RESULTS:
+-- [year, month, day, hour, minute, origin_airport_id, Origin_Airport, Origin_City, destination_airport_id, passport_number, name, phone_number, id, abbreviation, full_name, city ]
+-- 2020	7	29	8	20	8	Fiftyville Regional Airport	Fiftyville	4	5773159633	Ernest	(367) 555-5533	4	LHR	Heathrow Airport	London
+------------------------------------------------------------------------
