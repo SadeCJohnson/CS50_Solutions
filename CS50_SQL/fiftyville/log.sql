@@ -377,3 +377,23 @@ WHERE  account_number IN (SELECT account_number
 -- Russell
 -- Ernest
 ------------------------------------------------------------------------
+SELECT *
+FROM   flights
+       INNER JOIN airports
+               ON airports.id = flights.origin_airport_id
+       INNER JOIN passengers
+               ON passengers.flight_id = flights.id
+       INNER JOIN people
+               ON people.passport_number = passengers.passport_number
+WHERE  origin_airport_id = 8
+       AND year = 2020
+       AND month = 7
+       AND day = 29
+       AND people.NAME IN ( 'Russell', 'Ernest' )
+
+------------------------------------------------------------------------
+--RESULTS:
+-- [id, origin_airport_id, destination_airport_id, year, month, day, hour minute, id, abbreviation, full_name, city, flight_id, passport_number, seat, id, name, phone_number, passport_number, license_plate ]
+-- 18	8	6	2020	7	29	16	0	8	CSF	Fiftyville Regional Airport	Fiftyville	18	3592750733	4C	514354	Russell	(770) 555-1861	3592750733	322W7JE
+-- 36	8	4	2020	7	29	8	20	8	CSF	Fiftyville Regional Airport	Fiftyville	36	5773159633	4A	686048	Ernest	(367) 555-5533	5773159633	94KL13X
+------------------------------------------------------------------------
