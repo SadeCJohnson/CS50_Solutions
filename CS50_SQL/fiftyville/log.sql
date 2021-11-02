@@ -439,3 +439,45 @@ WHERE  NAME = 'Ernest'
 -- [year, month, day, hour, minute, origin_airport_id, Origin_Airport, Origin_City, destination_airport_id, passport_number, name, phone_number, id, abbreviation, full_name, city ]
 -- 2020	7	29	8	20	8	Fiftyville Regional Airport	Fiftyville	4	5773159633	Ernest	(367) 555-5533	4	LHR	Heathrow Airport	London
 ------------------------------------------------------------------------
+
+-- query for accomplice
+SELECT NAME,
+       phone_number
+FROM   people
+WHERE  phone_number IN (SELECT receiver
+                        FROM   (SELECT people.NAME,
+                                       passport_number,
+                                       phone_calls.caller,
+                                       phone_calls.receiver,
+                                       year,
+                                       day,
+                                       month,
+                                       duration
+                                FROM   phone_calls
+                                       INNER JOIN people
+                                               ON people.phone_number =
+                                                  phone_calls.caller
+                                WHERE  caller IN (SELECT phone_number
+                                                  FROM   people
+                                                  WHERE  license_plate IN (
+                                                         SELECT
+                                                         license_plate
+                                                                           FROM
+                                       courthouse_security_logs
+                                                         WHERE
+                                       activity = 'exit'
+                                       AND month = 7
+                                       AND day = 28
+                                       AND hour = 10
+                                       AND minute >= 15
+                                       AND minute <= 25))
+                                       AND year = 2020
+                                       AND month = 7
+                                       AND day = 28
+                                       AND duration < 60)
+                        WHERE  NAME = 'Ernest')
+ ------------------------------------------------------------------------
+ --RESULTS:
+ -- [name, phone_number]
+ -- Berthold	(375) 555-8161
+ ------------------------------------------------------------------------
