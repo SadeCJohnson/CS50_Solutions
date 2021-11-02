@@ -481,3 +481,30 @@ WHERE  phone_number IN (SELECT receiver
  -- [name, phone_number]
  -- Berthold	(375) 555-8161
  ------------------------------------------------------------------------
+ -- query to determine the price of the ticket / amount the accomplice deposited into thief's account
+
+SELECT *
+FROM   atm_transactions
+WHERE  account_number IN (SELECT account_number
+                          FROM   bank_accounts
+                                 INNER JOIN people
+                                         ON people.id = bank_accounts.person_id
+                          WHERE  account_number IN (SELECT account_number
+                                                    FROM   atm_transactions
+                                                    WHERE  year = 2020
+                                                           AND month = 7
+                                                           AND day = 28
+                                                           AND transaction_type
+                                                               =
+                                                               'withdraw'
+                                                           AND atm_location =
+                                                               'Fifer Street')
+                                 AND NAME = 'Ernest')
+       AND month = 7
+       AND day = 28
+       AND year = 2020
+ ------------------------------------------------------------------------
+ --RESULTS:
+ -- [id, account_number, year, month, day, atm_location, transaction_type, amount]
+ -- 267	49610011	2020	7	28	Fifer Street	withdraw	50
+ ------------------------------------------------------------------------
