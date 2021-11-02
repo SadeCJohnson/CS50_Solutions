@@ -371,3 +371,9 @@ WHERE  account_number IN (SELECT account_number
                                  AND day = 28
                                  AND transaction_type = 'withdraw'
                                  AND atm_location = 'Fifer Street');
+------------------------------------------------------------------------
+--RESULTS:
+-- [name]
+-- Russell
+-- Ernest
+------------------------------------------------------------------------
