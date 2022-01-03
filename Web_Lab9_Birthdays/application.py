@@ -21,9 +21,5 @@ def index():
         return redirect("/")
 
     else:
-
-        # TODO: Display the entries in the database on index.html
-
-        return render_template("index.html")
-
-
+        birthday_rows = db.execute("SELECT * FROM birthdays")
+        return render_template("index.html", birthdays=birthday_rows)
