@@ -14,14 +14,17 @@ db = SQL("sqlite:///birthdays.db")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    #add sanitization given that client html can be modified by user to give out of range numbers!
     if request.method == "POST":
-        db.execute("INSERT INTO birthdays (name, month, day) VALUES(?, ?, ?)",
-                    request.form.get('name'),
-                    request.form.get('month'),
-                    request.form.get('day')
-                   )
+        name = request.form.get('name')
+        month = request.form.get('month')
+        day = request.form.get('day')
+        db.execute("INSERT INTO birthdays (name, month, day) VALUES(?, ?, ?)", name, month, day)
         return redirect("/")
 
     else:
         birthday_rows = db.execute("SELECT * FROM birthdays")
         return render_template("index.html", birthdays=birthday_rows)
+
+if __name__ == '__main__':
+    app.run(debug=True)
