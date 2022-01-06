@@ -14,12 +14,15 @@ db = SQL("sqlite:///birthdays.db")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    #add sanitization given that client html can be modified by user to give out of range numbers!
+
     if request.method == "POST":
         name = request.form.get('name')
         month = request.form.get('month')
         day = request.form.get('day')
-        db.execute("INSERT INTO birthdays (name, month, day) VALUES(?, ?, ?)", name, month, day)
+        if (name is not None) and (month is not None) and (day is not None): # in case user changes name of html input tag which would render those get() assumptions above to be null!
+            if day != '' and month != '': # in case user submits empty strings for numerical types which will result in some type error
+                if (int(day) in range(1, 32)) and int(month) in range(1, 13): # in case user alters min/ max range on client side
+                    db.execute("INSERT INTO birthdays (name, month, day) VALUES(?, ?, ?)", name, month, day)
         return redirect("/")
 
     else:
