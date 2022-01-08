@@ -29,5 +29,15 @@ def index():
         birthday_rows = db.execute("SELECT * FROM birthdays")
         return render_template("block_definitions.html", birthdays=birthday_rows)
 
+
+@app.route("/update_entry", methods=["GET", "POST"])
+def update_entry():
+    #UPDATE birthday SET month = request.form.get('month'), day = request.form.get('day') WHERE name = request.form.get('name');
+    if request.method == "POST":
+        pass
+    else:
+        return render_template("update_entry.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True)

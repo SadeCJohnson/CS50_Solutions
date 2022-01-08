@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+
+{% block update_entry %}
+<h2>Update Birthday</h2>
+<form action="/update_entry" method="post">
+    <input name="name" type="text" placeholder="Type Name To Update">
+    <input name="month" type="number" min="1" max="12"  placeholder="New Month">
+    <input name="day"  type="number" min="1" max ="31" placeholder="New Day">
+    <input type="submit" value="Update Birthday">
+</form>
+{% endblock %}
