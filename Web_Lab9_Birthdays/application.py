@@ -32,9 +32,14 @@ def index():
 
 @app.route("/update_entry", methods=["GET", "POST"])
 def update_entry():
-    #UPDATE birthday SET month = request.form.get('month'), day = request.form.get('day') WHERE name = request.form.get('name');
+    # TODO: encapsulate form validation into one function
+    # TODO: add hyperlink on html
     if request.method == "POST":
-        pass
+        name = request.form.get('name')
+        month = request.form.get('month')
+        day = request.form.get('day')
+        db.execute("UPDATE birthdays SET month = ?, day = ? where name = ?", month, day, name)
+        return redirect("/")
     else:
         return render_template("update_entry.html")
 
