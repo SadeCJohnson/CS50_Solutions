@@ -40,14 +40,15 @@ def index():
 def update_entry():
     # TODO: add hyperlink on html
     if request.method == "POST":
-        name = request.form.get('name')
+        name = request.form.get('names')
         month = request.form.get('month')
         day = request.form.get('day')
         if validate_form(day=day, month=month, name=name):
             db.execute("UPDATE birthdays SET month = ?, day = ? where name = ?", month, day, name)
         return redirect("/")
     else:
-        return render_template("update_entry.html")
+        rows = db.execute("SELECT name FROM birthdays")
+        return render_template("update_entry.html", rows=rows)
 
 
 if __name__ == '__main__':

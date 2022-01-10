@@ -3,9 +3,13 @@
 {% block update_entry %}
 <h2>Update Birthday</h2>
 <form action="/update_entry" method="post">
-    <!-- use select statement to populate names input-->
-    <input name="name" type="text" placeholder="Type Name To Update">
-    <input name="month" type="number" min="1" max="12"  placeholder="New Month">
+    <label>Select name to Update:</label>
+    <select name = "names">
+        {% for row in rows %}
+            <option value="{{ row['name'] }}">{{ row['name'] }}</option>
+        {% endfor %}
+    </select>
+    <input name="month" type="number" min="1" max="12" placeholder="New Month">
     <input name="day"  type="number" min="1" max ="31" placeholder="New Day">
     <input type="submit" value="Update Birthday">
 </form>
