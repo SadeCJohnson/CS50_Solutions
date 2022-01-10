@@ -17,12 +17,13 @@ body {
     width: 90%;
 }
 
-.jumbotron {
+.jumbotron, a {
     background-color: #477bff;
     color: #fff;
     margin-bottom: 2rem;
     padding: 2rem 1rem;
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .section {

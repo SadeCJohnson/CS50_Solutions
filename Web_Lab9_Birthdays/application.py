@@ -38,7 +38,6 @@ def index():
 
 @app.route("/update_entry", methods=["GET", "POST"])
 def update_entry():
-    # TODO: add hyperlink on html
     if request.method == "POST":
         name = request.form.get('names')
         month = request.form.get('month')
