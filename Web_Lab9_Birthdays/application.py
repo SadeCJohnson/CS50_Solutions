@@ -32,6 +32,7 @@ def index():
         return redirect("/")
 
     else:
+        #TODO: cache results into browser storage and have update_entry() 'GET' method retrieve from cache to reduce redundant call on db
         birthday_rows = db.execute("SELECT * FROM birthdays")
         return render_template("block_definitions.html", birthdays=birthday_rows)
 
