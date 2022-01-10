@@ -140,3 +140,12 @@ def errorhandler(e):
 # Listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+# (1)recognized post request when adding to cart: https://studenthighstreet.com/cart/add?id=c637d81e-9ec1-452e-85ad-5d6f59ebf175
+# (2) searched for ID parameter in network tab upon looking at 'fleece-embroidered-joggers' route and uncovered fabebook tracing request which has id embedded in [content_id]
+# https://www.facebook.com/tr/?id=180595369100633&ev=ViewContent&dl=https%3A%2F%2Fstudenthighstreet.com%2Flisting%2Fchildsdraw%2Ffleece-embroidered-joggers&rl=https%3A%2F%2Fstudenthighstreet.com%2Fcategory%2Fmen%2Fclothing%2Ftrousers-shorts&if=false&ts=1641804386131&cd[currency]=GBP&cd[content_name]=Fleece%20Embroidered%20Joggers&cd[content_category]=Trousers&cd[content_ids]=%5B%22c637d81e-9ec1-452e-85ad-5d6f59ebf175%22%5D&cd[content_type]=product_group&cd[value]=70&sw=1280&sh=720&v=2.9.48&r=stable&ec=1&o=30&fbp=fb.1.1641603310746.1059201454&it=1641804385932&coo=false&exp=p1&rqm=GET
+# (3) searched [content_id] string for given item and found facebook tracing request
+#https://www.facebook.com/tr/?id=180595369100633&ev=ViewContent&dl=https://studenthighstreet.com/listing/arcminute/arcminute-puffer-jacket&rl=&if=false&ts=1641804681937&cd[currency]=GBP&cd[content_name]=Arcminute Puffer Jacket&cd[content_category]=Jackets&cd[content_ids]=["9e2ee909-c3f9-4563-bc3e-11389abf6805"]&cd[content_type]=product_group&cd[value]=110&sw=1280&sh=720&v=2.9.48&r=stable&ec=1&o=30&fbp=fb.1.1641603310746.1059201454&it=1641804680677&coo=false&exp=p1&rqm=GET
+# (4) formulated new post request: https://studenthighstreet.com/cart/add?id=9e2ee909-c3f9-4563-bc3e-11389abf6805
+# (5) edited other tab with post request exposed to include new id and resend
+# (6) done with failed attempt!
