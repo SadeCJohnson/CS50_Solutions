@@ -50,5 +50,10 @@ def update_entry():
         return render_template("update_entry.html", rows=rows)
 
 
+@app.route("/delete_entry", methods=["GET", "POST"])
+def delete_entry():
+    pass
+
+
 if __name__ == '__main__':
     app.run(debug=True)
