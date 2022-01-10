@@ -43,7 +43,7 @@ def update_entry():
         month = request.form.get('month')
         day = request.form.get('day')
         if validate_form(day=day, month=month, name=name):
-            db.execute("UPDATE birthdays SET month = ?, day = ? where name = ?", month, day, name)
+            db.execute("UPDATE birthdays SET month = ?, day = ? WHERE name = ?", month, day, name)
         return redirect("/")
     else:
         rows = db.execute("SELECT name FROM birthdays")
@@ -52,7 +52,13 @@ def update_entry():
 
 @app.route("/delete_entry", methods=["GET", "POST"])
 def delete_entry():
-    pass
+    name = request.form.get('name')
+    if name is not None and name != '':
+        db.execute("DELETE FROM birthdays WHERE name = ?", name)
+        return redirect("/")
+    else:
+        rows = db.execute("SELECT name FROM birthdays")
+    return render_template("update_entry.html", rows=rows)
 
 
 if __name__ == '__main__':
