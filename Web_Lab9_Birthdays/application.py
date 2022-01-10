@@ -21,7 +21,6 @@ def validate_form(day: str, month: str, name: str) -> bool:
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-
     if request.method == "POST":
         name = request.form.get('name')
         month = request.form.get('month')
@@ -52,13 +51,14 @@ def update_entry():
 
 @app.route("/delete_entry", methods=["GET", "POST"])
 def delete_entry():
-    name = request.form.get('name')
-    if name is not None and name != '':
-        db.execute("DELETE FROM birthdays WHERE name = ?", name)
+    if request.method == "POST":
+        name = request.form.get('names')
+        if name is not None and name != '':
+            db.execute("DELETE FROM birthdays WHERE name = ?", name)
         return redirect("/")
     else:
         rows = db.execute("SELECT name FROM birthdays")
-    return render_template("update_entry.html", rows=rows)
+    return render_template("delete_entry.html", rows=rows)
 
 
 if __name__ == '__main__':

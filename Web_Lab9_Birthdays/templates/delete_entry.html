@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+{% block update_entry %}
+<h2>Delete Birthday</h2>
+<form action="/delete_entry" method="post">
+    <label>Select name to Delete:</label>
+    <select name = "names">
+        {% for row in rows %}
+            <option value="{{ row['name'] }}">{{ row['name'] }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Delete Birthday">
+</form>
+{% endblock %}
