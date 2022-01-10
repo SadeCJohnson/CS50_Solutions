@@ -1,7 +1,6 @@
-import os
 
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request
 
 # Configure application
 app = Flask(__name__)
