@@ -124,20 +124,20 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
-        form_input = validate_form_inputs(user=username, password=password, confirmation=confirmation)
+        form_input = validate_form_inputs(username=username, password=password, confirmation=confirmation)
         if form_input:
-            return apology(form_input + " is invalid!")
+            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
-        rows = db.execute("SELECT * from users WHERE username is ?", username)
-        if len(rows) > 1:
+        rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
+        if rows[0]["username"] == username:
             return apology("Username is already taken!")
 
         elif password != confirmation:
             return apology("Passwords are NOT the same!")
         else:
-            db.execute("INSERT INTO users (username, hash) WHERE username = ? and hash = ?", username, generate_password_hash(password))
-            #can either log them in or redirect to login page!
-            rows = db.execute("SELECT * from users WHERE username is ?", username)
+            db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
+            #sets session id to newly inserted row in order to login user
+            rows = db.execute("SELECT * FROM users WHERE username is ?", username)
             session["user_id"] = rows[0]["id"]
             return redirect("/")
 
@@ -162,3 +162,6 @@ def errorhandler(e):
 # Listen for errors
 for code in default_exceptions:
     app.errorhandler(code)(errorhandler)
+
+if __name__ == '__main__':
+    app.run(debug=True)
