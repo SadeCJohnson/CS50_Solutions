@@ -120,7 +120,23 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        pass
+        #create a validation aux function for n form items
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        rows = db.execute("SELECT * from users WHERE username is ?", username)
+        if len(rows) > 1:
+            return apology("Username is already taken!")
+
+        elif password != confirmation:
+            return apology("Passwords are NOT the same!")
+        else:
+            db.execute("INSERT INTO users (username, hash) WHERE username = ? and hash = ?", username, generate_password_hash(password))
+            #can either log them in or redirect to login page!
+            session["user_id"] = rows[0]["id"]
+            #return redirect("/")
+
     else:
         return render_template("register.html")
 
