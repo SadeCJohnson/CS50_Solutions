@@ -63,9 +63,9 @@ def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"
 
-def validate_form_inputs(*args):
-    """Validates form inputs"""
-    for arg in args:
-        if arg == '' or arg is None:
-            return False
-    return True
+def validate_form_inputs(*kwargs):
+    """Returns param string to show to apology if form is invalid"""
+    for key, val in kwargs:
+        if val == '' or val is None:
+            return key
+    return None

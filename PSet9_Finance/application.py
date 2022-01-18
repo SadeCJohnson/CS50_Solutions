@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required, lookup, usd, validate_form_inputs
 
 # Configure application
 app = Flask(__name__)
@@ -120,10 +120,13 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        #create a validation aux function for n form items
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
+
+        form_input = validate_form_inputs(user=username, password=password, confirmation=confirmation)
+        if form_input:
+            return apology(form_input + " is invalid!")
 
         rows = db.execute("SELECT * from users WHERE username is ?", username)
         if len(rows) > 1:
