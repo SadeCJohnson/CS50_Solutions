@@ -119,6 +119,8 @@ def quote():
         form_input = validate_form_inputs(symbol=symbol)
         if form_input:
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
+        if not lookup(symbol):
+            return apology(symbol +" is not a valid stock symbol!")
         return render_template("quoted.html", quote=lookup(symbol))
 
     else:
