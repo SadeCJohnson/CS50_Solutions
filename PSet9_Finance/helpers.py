@@ -64,10 +64,10 @@ def usd(value):
     return f"${value:,.2f}"
 
 def validate_form_inputs(**kwargs):
-    """Returns param string to show to apology if form is invalid"""
+    """Returns param key:val pair to show to apology if form is invalid"""
     for key, val in kwargs.items():
         if val == '':
-            return key, ''
+            return key, val
         elif val is None:
             return key, None
     return None
