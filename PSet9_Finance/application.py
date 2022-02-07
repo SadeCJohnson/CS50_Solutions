@@ -53,7 +53,20 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    """
+    Transactions Table:
+    (1) <Int > foreign key on user_id
+    (2) <String> 'Bought' or 'Sold'
+    (3) <String> Stock Ticker Symbol
+    (4) <Int> Amount
+    (5) <Price> Purchase Price Per Unit
+    (6) <DateTime> time purchased
+    """
+    if request.method == 'POST':
+        return redirect("/")
+
+    if request.method == 'GET':
+        return render_template("buy.html")
 
 
 @app.route("/history")
