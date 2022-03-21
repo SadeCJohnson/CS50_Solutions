@@ -63,6 +63,7 @@ def buy():
     (6) <DateTime> time purchased
     """
     if request.method == 'POST':
+
         return redirect("/")
 
     if request.method == 'GET':
@@ -86,6 +87,7 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
+        #TODO: refactor to leverage validate_form_inputs()
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("must provide username", 403)
@@ -131,7 +133,7 @@ def quote():
         symbol = request.form.get("symbol")
         form_input = validate_form_inputs(symbol=symbol)
         if form_input:
-            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
+            return apology("Input field with name = '" + form_input[0] + "' was tampered with on client side!")
         if not lookup(symbol):
             return apology(symbol +" is not a valid stock symbol!")
         return render_template("quoted.html", quote=lookup(symbol))
@@ -149,7 +151,7 @@ def register():
 
         form_input = validate_form_inputs(username=username, password=password, confirmation=confirmation)
         if form_input:
-            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
+            return apology("Input field with name = '" + form_input[0] + "' was tampered with on client side!")
 
         rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
         if rows[0]["username"] == username:
