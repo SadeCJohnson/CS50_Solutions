@@ -135,7 +135,7 @@ def quote():
         if form_input:
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
         if not lookup(symbol):
-            return apology(symbol +" is not a valid stock symbol!")
+            return apology(symbol + " is not a valid stock symbol!")
         return render_template("quoted.html", quote=lookup(symbol))
 
     else:
@@ -154,11 +154,19 @@ def register():
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
         rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
-        if rows[0]["username"] == username:
-            return apology("Username '" +rows[0]["username"] + "' is already taken!")
+        if len(rows) != 0 and\
+                rows[0]["username"] == username:
+            return apology("Username '" + rows[0]["username"] + "' is already taken!")
 
         elif password != confirmation:
             return apology("Passwords are NOT the same!")
+
+        #TODO: implement stricter password policy:
+        #TODO: (i.e. 6 characters long, at least one lower and upper, with at least one number and symbol)
+        #TODO: could write a helper function using regex or write a naive one in which each requirement is intially false
+        #TODO: then as you iterate through the list of character checking if any of the above requirements is met ... if so change flag to true and continue
+        #TODO: then finally, and all the flags and return true or false
+
         else:
             db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
             #sets session id to newly inserted row in order to login user
