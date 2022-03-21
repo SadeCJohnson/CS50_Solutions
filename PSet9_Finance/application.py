@@ -155,7 +155,7 @@ def register():
 
         rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
         if rows[0]["username"] == username:
-            return apology("Username is already taken!")
+            return apology("Username '" +rows[0]["username"] + "' is already taken!")
 
         elif password != confirmation:
             return apology("Passwords are NOT the same!")
