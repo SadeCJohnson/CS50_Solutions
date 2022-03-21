@@ -55,7 +55,7 @@ def buy():
     """Buy shares of stock"""
     """
     Transactions Table:
-    (1) <Int > foreign key on user_id
+    (1) <Int> foreign key on user_id
     (2) <String> 'Bought' or 'Sold'
     (3) <String> Stock Ticker Symbol
     (4) <Int> Amount
