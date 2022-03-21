@@ -86,15 +86,14 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-        #TODO: refactor to leverage validate_form_inputs()
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
+        form_input = validate_form_inputs(username=username, password=password)
 
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
+        # Ensure username and passwords are not None
+        if form_input:
+            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
@@ -154,18 +153,17 @@ def register():
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
         rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
-        if len(rows) != 0 and\
-                rows[0]["username"] == username:
+        if len(rows) != 0 and rows[0]["username"] == username:
             return apology("Username '" + rows[0]["username"] + "' is already taken!")
 
         elif password != confirmation:
             return apology("Passwords are NOT the same!")
 
         #TODO: implement stricter password policy:
-        #TODO: (i.e. 6 characters long, at least one lower and upper, with at least one number and symbol)
-        #TODO: could write a helper function using regex or write a naive one in which each requirement is intially false
-        #TODO: then as you iterate through the list of character checking if any of the above requirements is met ... if so change flag to true and continue
-        #TODO: then finally, and all the flags and return true or false
+        # (i.e. 6 characters long, at least one lower and upper, with at least one number and symbol)
+        # could write a helper function using regex or write a naive one in which each requirement is intially false
+        # then as you iterate through the list of character checking if any of the above requirements is met ... if so change flag to true and continue
+        # then finally, and all the flags and return true or false
 
         else:
             db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
