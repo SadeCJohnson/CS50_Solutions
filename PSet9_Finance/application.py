@@ -133,7 +133,7 @@ def quote():
         symbol = request.form.get("symbol")
         form_input = validate_form_inputs(symbol=symbol)
         if form_input:
-            return apology("Input field with name = '" + form_input[0] + "' was tampered with on client side!")
+            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
         if not lookup(symbol):
             return apology(symbol +" is not a valid stock symbol!")
         return render_template("quoted.html", quote=lookup(symbol))
@@ -151,7 +151,7 @@ def register():
 
         form_input = validate_form_inputs(username=username, password=password, confirmation=confirmation)
         if form_input:
-            return apology("Input field with name = '" + form_input[0] + "' was tampered with on client side!")
+            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
         rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
         if rows[0]["username"] == username:
