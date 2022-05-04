@@ -54,13 +54,16 @@ def index():
 def buy():
     """Buy shares of stock"""
     """
-    Transactions Table:
-    (1) <Int> foreign key on user_id
-    (2) <String> 'Bought' or 'Sold'
-    (3) <String> Stock Ticker Symbol
-    (4) <Int> Amount
-    (5) <Price> Purchase Price Per Unit
-    (6) <DateTime> time purchased
+    CREATE TABLE IF NOT EXISTS transactions
+  (
+     user_id          INTEGER NOT NULL,
+     ownership_status BIT NOT NULL,
+     ticker_symbol    TEXT NOT NULL,
+     amount           INTEGER NOT NULL,
+     purchase_price   DECIMAL(9,2) NOT NULL,
+     transaction_time DATETIME NOT NULL,
+     FOREIGN KEY(user_id) REFERENCES users (id)
+  );
     """
     if request.method == 'POST':
 
