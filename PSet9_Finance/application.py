@@ -66,10 +66,36 @@ def buy():
   );
     """
     if request.method == 'POST':
+        amt_of_shares = int(request.form.get("amount"))
+        stock_symbol = request.form.get("symbol")
 
-        return redirect("/")
+        form_input = validate_form_inputs(amt_of_shares=amt_of_shares, stock_symbol=stock_symbol)
 
-    if request.method == 'GET':
+        # Ensure username and passwords are not None
+        if form_input:
+            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
+
+        # Ensure stock symbol is valid
+        quote = lookup(stock_symbol)
+        if not quote:
+            return apology(stock_symbol + " is not a valid stock symbol!")
+
+        # Ensure shares > 0
+        if amt_of_shares <= 0:
+            return apology("Cannot make a purchase with share amount = " + str(amt_of_shares))
+
+        # Ensure user has enough cash to make purchase
+        rows = db.execute("SELECT cash FROM users WHERE id = ?", session.get("user_id"))
+        user_balance = rows[0]["cash"]
+        purchase_price = round(quote["price"] * amt_of_shares, 2)
+        if user_balance < purchase_price:
+            return apology("Insufficient funds!\nYou require $" + str(purchase_price - user_balance) + " to complete purchase.")
+
+        else:
+            # make a sql transaction: reduce user balance AND insert into transaction table!
+            pass
+
+    else:
         return render_template("buy.html")
 
 
