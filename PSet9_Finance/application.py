@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -57,7 +58,7 @@ def buy():
     CREATE TABLE IF NOT EXISTS transactions
   (
      user_id          INTEGER NOT NULL,
-     ownership_status BIT NOT NULL,
+     ownership_status BIT NOT NULL, -- 1 if bought, 0 if sold
      ticker_symbol    TEXT NOT NULL,
      amount           INTEGER NOT NULL,
      purchase_price   DECIMAL(9,2) NOT NULL,
@@ -93,7 +94,24 @@ def buy():
 
         else:
             # make a sql transaction: reduce user balance AND insert into transaction table!
-            pass
+            db.execute("UPDATE users SET cash = " + user_balance - purchase_price + " WHERE id = ?", session.get("user_id"))
+            db.execute("INSERT INTO transactions VALUES(" + session.get("user_id") + ", "
+                                                          + 1 + ", "
+                                                          + stock_symbol + ", "
+                                                          + amt_of_shares + ", "
+                                                          + purchase_price + ", "
+                                                          + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + ")")
+
+            # db.execute("BEGIN TRANSACTION\n" +
+            #            "UPDATE users SET cash = " + user_balance - purchase_price + "WHERE id = ?", session.get("user_id") + "\n" +
+            #            "INSERT INTO transactions VALUES(" + session.get("user_id") + ","
+            #                                               + 1 + ","
+            #                                               + stock_symbol + ","
+            #                                               + amt_of_shares + ","
+            #                                               + purchase_price + ","
+            #                                               + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + ")\n" +
+            #            "COMMIT TRANSACTION")
+            return redirect("/")
 
     else:
         return render_template("buy.html")
