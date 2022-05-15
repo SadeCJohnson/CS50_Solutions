@@ -18,3 +18,9 @@ CREATE TABLE IF NOT EXISTS transactions
      transaction_time DATETIME NOT NULL,
      FOREIGN KEY(user_id) REFERENCES users (id)
   );
+
+
+-- AUXILLARY COMMANDS TO RESTORE ORIGINAL TABLE STATE!
+-- delete from transactions;
+-- update users set cash = 10000 where id =1;
+

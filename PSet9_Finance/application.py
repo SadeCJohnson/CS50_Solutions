@@ -98,7 +98,6 @@ def buy():
             return apology("Insufficient funds!\nYou require $" + str(purchase_price - user_balance) + " to complete purchase.")
 
         else:
-            # make a sql transaction: reduce user balance AND insert into transaction table!
             db.execute("UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = ?", session.get("user_id"))
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
                                                            + str(1) + "', '"
@@ -107,15 +106,17 @@ def buy():
                                                            + str(quote["price"]) + "', '"
                                                            + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
 
-            # db.execute("BEGIN TRANSACTION\n" +
-            #            "UPDATE users SET cash = " + user_balance - purchase_price + "WHERE id = ?", session.get("user_id") + "\n" +
-            #            "INSERT INTO transactions VALUES(" + session.get("user_id") + ","
-            #                                               + 1 + ","
-            #                                               + stock_symbol + ","
-            #                                               + amt_of_shares + ","
-            #                                               + purchase_price + ","
-            #                                               + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + ")\n" +
-            #            "COMMIT TRANSACTION")
+            # Transactions are not supported here since SQLite doesn't support multiple statements at once
+            # https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.execute
+            # db.execute("BEGIN TRANSACTION;\n" +
+            #            "UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = " + str(session.get("user_id")) + ";\n" +
+            #            "INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
+            #                                                + str(1) + "', '"
+            #                                                + stock_symbol + "', '"
+            #                                                + str(amt_of_shares) + "', '"
+            #                                                + str(quote["price"]) + "', '"
+            #                                                + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "');\n" +
+            #            "COMMIT TRANSACTION;")
             return redirect("/")
 
     else:
