@@ -67,7 +67,16 @@ def buy():
   );
     """
     if request.method == 'POST':
-        amt_of_shares = int(request.form.get("amount"))
+        try:
+            amt_of_shares = int(request.form.get("amount"))
+
+        except ValueError:
+            return apology("'" + request.form.get("amount") + "' is not a valid integer")
+
+        # Ensure shares > 0
+        if amt_of_shares <= 0:
+            return apology("Cannot make a purchase with share amount = " + str(amt_of_shares))
+
         stock_symbol = request.form.get("symbol")
 
         form_input = validate_form_inputs(amt_of_shares=amt_of_shares, stock_symbol=stock_symbol)
@@ -81,10 +90,6 @@ def buy():
         if not quote:
             return apology(stock_symbol + " is not a valid stock symbol!")
 
-        # Ensure shares > 0
-        if amt_of_shares <= 0:
-            return apology("Cannot make a purchase with share amount = " + str(amt_of_shares))
-
         # Ensure user has enough cash to make purchase
         rows = db.execute("SELECT cash FROM users WHERE id = ?", session.get("user_id"))
         user_balance = rows[0]["cash"]
@@ -94,13 +99,13 @@ def buy():
 
         else:
             # make a sql transaction: reduce user balance AND insert into transaction table!
-            db.execute("UPDATE users SET cash = " + user_balance - purchase_price + " WHERE id = ?", session.get("user_id"))
-            db.execute("INSERT INTO transactions VALUES(" + session.get("user_id") + ", "
-                                                          + 1 + ", "
-                                                          + stock_symbol + ", "
-                                                          + amt_of_shares + ", "
-                                                          + purchase_price + ", "
-                                                          + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + ")")
+            db.execute("UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = ?", session.get("user_id"))
+            db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
+                                                           + str(1) + "', '"
+                                                           + stock_symbol + "', '"
+                                                           + str(amt_of_shares) + "', '"
+                                                           + str(quote["price"]) + "', '"
+                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
 
             # db.execute("BEGIN TRANSACTION\n" +
             #            "UPDATE users SET cash = " + user_balance - purchase_price + "WHERE id = ?", session.get("user_id") + "\n" +
