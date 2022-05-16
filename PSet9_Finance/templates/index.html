@@ -18,7 +18,7 @@
         <td>{{ transaction['name'] }}</td>
         <td>{{ transaction['amount'] }}</td>
         <td>{{ "$" ~ transaction['price'] }}</td>
-        <td>{{ "$" ~ transaction['price'] * transaction['amount'] }}</td>
+        <td>{{ "$" ~ transaction['total'] }}</td>
     </tr>
     {% endfor %}
     <tr>

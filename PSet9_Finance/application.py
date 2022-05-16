@@ -47,12 +47,13 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    transactions = db.execute("SELECT ticker_symbol, amount from transactions WHERE user_id = ?", session.get("user_id"))
+    transactions = db.execute("SELECT ticker_symbol, amount from transactions WHERE ownership_status = 1 AND user_id = ?", session.get("user_id"))
 
     """adding new key/val to transactions in order for html template to get info from one structure"""
     for transaction in transactions:
         transaction['price'] = lookup(transaction['ticker_symbol'])['price']
         transaction['name'] = lookup(transaction['ticker_symbol'])['name']
+        transaction['total'] = format(round(transaction['price'] * transaction['amount'], 2), '.2f')
     user_balance = db.execute("SELECT cash FROM users WHERE id = ?", session.get("user_id"))
     return render_template('index.html', transactions=transactions, user_balance=user_balance[0])
 
