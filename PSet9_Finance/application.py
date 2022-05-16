@@ -47,7 +47,14 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    transactions = db.execute("SELECT ticker_symbol, amount from transactions WHERE user_id = ?", session.get("user_id"))
+
+    """adding new key/val to transactions in order for html template to get info from one structure"""
+    for transaction in transactions:
+        transaction['price'] = lookup(transaction['ticker_symbol'])['price']
+        transaction['name'] = lookup(transaction['ticker_symbol'])['name']
+    user_balance = db.execute("SELECT cash FROM users WHERE id = ?", session.get("user_id"))
+    return render_template('index.html', transactions=transactions, user_balance=user_balance[0])
 
 
 @app.route("/buy", methods=["GET", "POST"])
