@@ -117,6 +117,7 @@ def buy():
             #                                                + str(quote["price"]) + "', '"
             #                                                + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "');\n" +
             #            "COMMIT TRANSACTION;")
+            flash("Bought!")
             return redirect("/")
 
     else:
