@@ -257,7 +257,7 @@ def sell():
         # Ensure user has enough shares to sell
         amount_owned = db.execute("SELECT amount from transactions WHERE ownership_status = 1 AND ticker_symbol = ?", ticker)
         if int(amount_requested) > amount_owned[0]['amount']:
-            return apology("You do not own enough shares to complete your sell order!")
+            return apology("Your shares are insufficient to complete your sell order!")
 
     else:
         tickers = db.execute("SELECT ticker_symbol FROM transactions WHERE ownership_status is 1 AND user_id = ?", session.get("user_id"))
