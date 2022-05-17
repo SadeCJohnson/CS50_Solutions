@@ -81,10 +81,10 @@ def buy():
     """
     if request.method == 'POST':
         try:
-            amt_of_shares = int(request.form.get("amount"))
+            amt_of_shares = int(request.form.get("shares"))
 
         except ValueError:
-            return apology("'" + request.form.get("amount") + "' is not a valid integer")
+            return apology("'" + request.form.get("shares") + "' is not a valid integer")
 
         # Ensure shares > 0
         if amt_of_shares <= 0:
@@ -248,8 +248,16 @@ def register():
 def sell():
     """Sell shares of stock"""
     if request.method == 'POST':
-        ticker = request.form.get("ticker")
-        amount = request.form.get("amount")
+        ticker = request.form.get("symbol")
+        amount_requested = request.form.get("shares")
+        form_input = validate_form_inputs(ticker=ticker, amount_requested=amount_requested)
+        if form_input:
+            return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
+
+        # Ensure user has enough shares to sell
+        amount_owned = db.execute("SELECT amount from transactions WHERE ownership_status = 1 AND ticker_symbol = ?", ticker)
+        if int(amount_requested) > amount_owned[0]['amount']:
+            return apology("You do not own enough shares to complete your sell order!")
 
     else:
         tickers = db.execute("SELECT ticker_symbol FROM transactions WHERE ownership_status is 1 AND user_id = ?", session.get("user_id"))
