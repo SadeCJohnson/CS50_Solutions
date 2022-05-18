@@ -259,6 +259,20 @@ def sell():
         if int(amount_requested) > amount_owned[0]['amount']:
             return apology("Your shares are insufficient to complete your sell order!")
 
+        else:
+            #FIXME - when user buys 2 of the same stock at different prices ... which one to update?? Index home page should have 'group by' to collapse duplicate stocks but what about price?
+            db.execute("UPDATE transactions SET amount = " + str(amount_owned[0]['amount'] - int(amount_requested)) + " WHERE user_id = " + session.get("user_id") + " AND ticker_symbol = " + ticker)
+            quote = lookup(ticker)
+            db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
+                                                           + str(0) + "', '"
+                                                           + ticker + "', '"
+                                                           + "-" + amount_requested + "', '"
+                                                           + str(quote["price"]) + "', '"
+                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
+
+            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + session.get("user_id") + ") + " + str(int(amount_requested) * quote) + ") WHERE user_id = ", session.get("user_id"))
+            return redirect("/")
+
     else:
         tickers = db.execute("SELECT ticker_symbol FROM transactions WHERE ownership_status is 1 AND user_id = ?", session.get("user_id"))
         return render_template("sell.html", tickers=tickers)
