@@ -15,7 +15,7 @@
     {% for transaction in transactions %}
     <tr>
         <td>{{ transaction['ticker_symbol'] }}</td>
-        <td>{{ transaction['name'] }}</td>
+        <td>{{ transaction['stock_name'] }}</td>
         <td>{{ transaction['amount'] }}</td>
         <td>{{ "$" ~ transaction['price'] }}</td>
         <td>{{ "$" ~ transaction['total'] }}</td>

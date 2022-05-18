@@ -47,15 +47,13 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    transactions = db.execute("SELECT ticker_symbol, amount from transactions WHERE ownership_status = 1 AND user_id = ?", session.get("user_id"))
+    transactions = db.execute("SELECT ticker_symbol, amount, stock_name from transactions WHERE ownership_status = 1 AND user_id = ?", session.get("user_id"))
     portfolio_valuation = 0
     """adding new key/val to transactions in order for html template to get info from one structure"""
 
     #TODO: to help with performance, lookup() should be refactored to take n symbols and return a listing of metadata relating to that ticker
-    #TODO: an easier performance gap would be to have the stock name be persisted in the db so that we can call lookup() once per loop cycle!
     for transaction in transactions:
         transaction['price'] = lookup(transaction['ticker_symbol'])['price']
-        transaction['name'] = lookup(transaction['ticker_symbol'])['name']
         transaction['total'] = format(round(transaction['price'] * transaction['amount'], 2), '.2f')
         portfolio_valuation += float(transaction['total'])
     user_balance = db.execute("SELECT cash FROM users WHERE id = ?", session.get("user_id"))
