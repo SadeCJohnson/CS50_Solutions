@@ -261,7 +261,8 @@ def sell():
 
         else:
             #FIXME - when user buys 2 of the same stock at different prices ... which one to update?? Index home page should have 'group by' to collapse duplicate stocks but what about price?
-            db.execute("UPDATE transactions SET amount = " + str(amount_owned[0]['amount'] - int(amount_requested)) + " WHERE user_id = " + session.get("user_id") + " AND ticker_symbol = " + ticker)
+            #FIXME - consider zero edge case, what does row entry look like??
+            db.execute("UPDATE transactions SET amount = " + str(amount_owned[0]['amount'] - int(amount_requested)) + " WHERE user_id = " + str(session.get("user_id")) + " AND ticker_symbol = '" + ticker + "'")
             quote = lookup(ticker)
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
                                                            + str(0) + "', '"
@@ -270,7 +271,7 @@ def sell():
                                                            + str(quote["price"]) + "', '"
                                                            + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
 
-            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + session.get("user_id") + ") + " + str(int(amount_requested) * quote) + ") WHERE user_id = ", session.get("user_id"))
+            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(int(amount_requested) * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
             return redirect("/")
 
     else:
