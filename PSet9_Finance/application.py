@@ -71,6 +71,7 @@ def buy():
      user_id          INTEGER NOT NULL,
      ownership_status BIT NOT NULL, -- 1 if bought, 0 if sold
      ticker_symbol    TEXT NOT NULL,
+     stock_name       TEXT NOT NULL,
      amount           INTEGER NOT NULL,
      purchase_price   DECIMAL(9,2) NOT NULL,
      transaction_time DATETIME NOT NULL,
@@ -115,7 +116,8 @@ def buy():
                                                            + stock_symbol + "', '"
                                                            + str(amt_of_shares) + "', '"
                                                            + str(quote["price"]) + "', '"
-                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
+                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "', '"
+                                                           + quote['name'] + "')")
 
             # Transactions are not supported here since SQLite doesn't support multiple statements at once
             # https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.execute
@@ -267,7 +269,8 @@ def sell():
                                                            + ticker + "', '"
                                                            + "-" + amount_requested + "', '"
                                                            + str(quote["price"]) + "', '"
-                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
+                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "', '"
+                                                           + quote['name'] + "')")
 
             db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(int(amount_requested) * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
             return redirect("/")
