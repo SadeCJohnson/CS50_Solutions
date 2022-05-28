@@ -51,8 +51,7 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
     #FIXME (3): Index home page should have 'group by' to collapse duplicate stocks and sum() to account for what's owned minus sold ...
-    # But what about price consolidation when the same stock is purchased at two different points in time??
-    # Do we run some average() on price to consolidate this?? Can refer to: https://finance.cs50.net/ to view how they managed this during the weekdays!
+    # Can refer to: https://finance.cs50.net/ to view how they managed this during the weekdays!
     transactions = db.execute("SELECT ticker_symbol, amount, stock_name from transactions WHERE ownership_status = 1 AND user_id = ?", session.get("user_id"))
     portfolio_valuation = 0
     """adding new key/val to transactions in order for html template to get info from one structure"""
@@ -267,9 +266,6 @@ def sell():
             return apology("Your shares are insufficient to complete your sell order!")
 
         else:
-
-            #FIXME (1) - For record keeping, it's probably best to have done an insertion and instead of updating
-            db.execute("UPDATE transactions SET amount = " + str(amount_owned[0]['amount'] - int(amount_requested)) + " WHERE user_id = " + str(session.get("user_id")) + " AND ticker_symbol = '" + ticker + "'")
             quote = lookup(ticker)
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
                                                            + str(0) + "', '"
