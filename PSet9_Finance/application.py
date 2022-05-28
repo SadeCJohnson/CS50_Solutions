@@ -50,9 +50,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    #FIXME (3): Index home page should have 'group by' to collapse duplicate stocks and sum() to account for what's owned minus sold ...
-    # Can refer to: https://finance.cs50.net/ to view how they managed this during the weekdays!
-    transactions = db.execute("SELECT ticker_symbol, amount, stock_name from transactions WHERE ownership_status = 1 AND user_id = ?", session.get("user_id"))
+    transactions = db.execute("SELECT ticker_symbol, SUM(amount) as amount, stock_name from transactions WHERE user_id = ? GROUP BY ticker_symbol HAVING SUM(amount) > 0", session.get("user_id"))
     portfolio_valuation = 0
     """adding new key/val to transactions in order for html template to get info from one structure"""
 
@@ -260,8 +258,7 @@ def sell():
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
         # Ensure user has enough shares to sell
-        #FIXME (2) - will need to refactor this statement given that we will sum up the amount of all positive amounts (i.e. purchased) and negative amounts (i.e. sold)
-        amount_owned = db.execute("SELECT amount from transactions WHERE ownership_status = 1 AND ticker_symbol = ?", ticker)
+        amount_owned = db.execute("SELECT SUM(amount) as amount from transactions WHERE ticker_symbol = ? GROUP BY ticker_symbol", ticker)
         if int(amount_requested) > amount_owned[0]['amount']:
             return apology("Your shares are insufficient to complete your sell order!")
 
@@ -279,7 +276,7 @@ def sell():
             return redirect("/")
 
     else:
-        tickers = db.execute("SELECT ticker_symbol FROM transactions WHERE ownership_status is 1 AND user_id = ?", session.get("user_id"))
+        tickers = db.execute("SELECT ticker_symbol FROM transactions WHERE user_id = ? GROUP BY ticker_symbol HAVING SUM(amount) > 0", session.get("user_id"))
         return render_template("sell.html", tickers=tickers)
 
 
