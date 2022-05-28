@@ -43,6 +43,9 @@ if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
 
+
+#FIXME: remove all instances of concatenation to prevent sql injection attack
+
 @app.route("/")
 @login_required
 def index():
