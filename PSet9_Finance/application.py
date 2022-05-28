@@ -72,7 +72,6 @@ def buy():
     CREATE TABLE IF NOT EXISTS transactions
   (
      user_id          INTEGER NOT NULL,
-     ownership_status BIT NOT NULL, -- 1 if bought, 0 if sold
      ticker_symbol    TEXT NOT NULL,
      stock_name       TEXT NOT NULL,
      amount           INTEGER NOT NULL,
