@@ -114,7 +114,6 @@ def buy():
         else:
             db.execute("UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = ?", session.get("user_id"))
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
-                                                           + str(1) + "', '"
                                                            + stock_symbol + "', '"
                                                            + str(amt_of_shares) + "', '"
                                                            + str(quote["price"]) + "', '"
