@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<table class = "table table-striped">
+    <thead>
+    <tr>
+        <th><b>Symbol</b></th>
+        <th><b>Shares</b></th>
+        <th><b>Price</b></th>
+        <th><b>Transacted</b></th>
+    </tr>
+    </thead>
+    {% for hist in history %}
+    <tr>
+        <td>{{ hist['ticker_symbol'] }}</td>
+        <td>{{ hist['amount'] }}</td>
+        <td>{{ "$" ~ hist['purchase_price'] }}</td>
+        <td>{{ hist['transaction_time'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
