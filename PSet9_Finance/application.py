@@ -50,7 +50,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    transactions = db.execute("SELECT ticker_symbol, SUM(amount) as amount, stock_name from transactions WHERE user_id = ? GROUP BY ticker_symbol HAVING SUM(amount) > 0", session.get("user_id"))
+    transactions = db.execute("SELECT ticker_symbol, stock_name, SUM(amount) as amount from transactions WHERE user_id = ? GROUP BY ticker_symbol HAVING SUM(amount) > 0", session.get("user_id"))
     portfolio_valuation = 0
     """adding new key/val to transactions in order for html template to get info from one structure"""
 
@@ -61,7 +61,7 @@ def index():
         portfolio_valuation += float(transaction['total'])
     user_balance = db.execute("SELECT cash FROM users WHERE id = ?", session.get("user_id"))
     portfolio_valuation += user_balance[0]['cash']
-    return render_template('index.html', transactions=transactions, user_balance=user_balance[0], portfolio_valuation=format(round(portfolio_valuation, 2), '.2f'))
+    return render_template('index.html', transactions=transactions, user_balance=round(user_balance[0]['cash'], 2), portfolio_valuation=format(round(portfolio_valuation, 2), '.2f'))
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -109,16 +109,16 @@ def buy():
         user_balance = rows[0]["cash"]
         purchase_price = round(quote["price"] * amt_of_shares, 2)
         if user_balance < purchase_price:
-            return apology("Insufficient funds!\nYou require $" + str(purchase_price - user_balance) + " to complete purchase.")
+            return apology("Insufficient funds!\nYou require $" + str(round(purchase_price - user_balance, 2)) + " to complete purchase.")
 
         else:
             db.execute("UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = ?", session.get("user_id"))
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
                                                            + stock_symbol + "', '"
+                                                           + quote['name'] + "', '"
                                                            + str(amt_of_shares) + "', '"
                                                            + str(quote["price"]) + "', '"
-                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "', '"
-                                                           + quote['name'] + "')")
+                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
 
             # Transactions are not supported here since SQLite doesn't support multiple statements at once
             # https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.execute
@@ -263,12 +263,11 @@ def sell():
         else:
             quote = lookup(ticker)
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
-                                                           + str(0) + "', '"
                                                            + ticker + "', '"
+                                                           + quote['name'] + "', '"
                                                            + "-" + amount_requested + "', '"
                                                            + str(quote["price"]) + "', '"
-                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "', '"
-                                                           + quote['name'] + "')")
+                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
 
             db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(int(amount_requested) * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
             return redirect("/")
