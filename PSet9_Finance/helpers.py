@@ -99,27 +99,29 @@ def is_compliant_to_password_policy(password):
         return False
 
     else:
-        is_symbol = False
-        is_lower_case = False
-        is_upper_case = False
-        is_number = False
+        is_sym = False
+        is_lower = False
+        is_upper = False
+        is_num = False
 
         for ch in password:
+            if is_sym and is_lower and is_upper and is_num: #early break if all 4 conditions are met
+                return True
+
             if is_symbol(ch):
-                is_symbol = True
+                is_sym = True
                 continue
 
             if is_lower_case(ch):
-                is_lower_case = True
+                is_lower = True
                 continue
 
             if is_upper_case(ch):
-                is_upper_case = True
+                is_upper = True
                 continue
 
             if is_number(ch):
-                is_number = True
+                is_num = True
                 continue
 
-            if is_symbol and is_lower_case and is_upper_case and is_number: #early break if all 4 conditions are met
-                return True
+        return False
