@@ -251,14 +251,24 @@ def sell():
     """Sell shares of stock"""
     if request.method == 'POST':
         ticker = request.form.get("symbol")
-        amount_requested = request.form.get("shares")
+
+        try:
+            amount_requested = int(request.form.get("shares"))
+
+        except ValueError:
+            return apology("'" + request.form.get("shares") + "' is not a valid integer")
+
+        # Ensure shares > 0
+        if amount_requested <= 0:
+            return apology("Cannot make a sell order with share amount = " + str(amount_requested))
+
         form_input = validate_form_inputs(ticker=ticker, amount_requested=amount_requested)
         if form_input:
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
         # Ensure user has enough shares to sell
         amount_owned = db.execute("SELECT SUM(amount) as amount from transactions WHERE ticker_symbol = ? GROUP BY ticker_symbol", ticker)
-        if int(amount_requested) > amount_owned[0]['amount']:
+        if amount_requested > amount_owned[0]['amount']:
             return apology("Your shares are insufficient to complete your sell order!")
 
         else:
@@ -266,11 +276,11 @@ def sell():
             db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
                                                            + ticker + "', '"
                                                            + quote['name'] + "', '"
-                                                           + "-" + amount_requested + "', '"
+                                                           + str(-1 * amount_requested) + "', '"
                                                            + str(quote["price"]) + "', '"
                                                            + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
 
-            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(int(amount_requested) * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
+            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(amount_requested * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
             return redirect("/")
 
     else:
