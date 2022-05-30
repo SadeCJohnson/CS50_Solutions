@@ -74,20 +74,21 @@ def validate_form_inputs(**kwargs):
     return None
 
 
+# Refer to https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
+# for ASCII character code mappings
 def is_symbol(ch):
     pass
 
-
 def is_lower_case(ch):
-    pass
+    return 97 <= ord(ch) <= 122
 
 
 def is_upper_case(ch):
-    pass
+    return 65 <= ord(ch) <= 90
 
 
 def is_number(ch):
-    pass
+    return 48 <= ord(ch) <= 57
 
 
 def is_compliant_to_password_policy(password):
