@@ -105,14 +105,18 @@ def is_compliant_to_password_policy(password):
         for ch in password:
             if is_symbol(ch):
                 is_symbol = True
+                continue
 
             if is_lower_case(ch):
                 is_lower_case = True
+                continue
 
             if is_upper_case(ch):
                 is_upper_case = True
+                continue
 
             if is_number(ch):
                 is_number = True
+                continue
 
         is_symbol and is_lower_case and is_upper_case and is_number
