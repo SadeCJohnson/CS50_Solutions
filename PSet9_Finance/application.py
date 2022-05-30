@@ -44,7 +44,6 @@ if not os.environ.get("API_KEY"):
 
 
 
-#FIXME: remove all instances of concatenation to prevent sql injection attack
 
 @app.route("/")
 @login_required
@@ -63,7 +62,7 @@ def index():
     portfolio_valuation += user_balance[0]['cash']
     return render_template('index.html', transactions=transactions, user_balance=round(user_balance[0]['cash'], 2), portfolio_valuation=format(round(portfolio_valuation, 2), '.2f'))
 
-
+#FIXME: remove all instances of concatenation to prevent sql injection attack
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
@@ -243,6 +242,7 @@ def register():
         return render_template("register.html")
 
 
+#FIXME: remove all instances of concatenation to prevent sql injection attack
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
