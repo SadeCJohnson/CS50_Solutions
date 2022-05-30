@@ -8,7 +8,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, usd, validate_form_inputs
+from helpers import apology, login_required, lookup, usd, validate_form_inputs, is_compliant_to_password_policy
 
 # Configure application
 app = Flask(__name__)
@@ -141,7 +141,7 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    history = db.execute("SELECT * from transactions ORDER BY ticker_symbol")
+    history = db.execute("SELECT * from transactions WHERE user_id = ? ORDER BY ticker_symbol", session.get("user_id"))
     return render_template('history.html', history=history)
 
 
@@ -225,6 +225,9 @@ def register():
         if len(rows) != 0 and rows[0]["username"] == username:
             return apology("Username '" + rows[0]["username"] + "' is already taken!")
 
+        elif not is_compliant_to_password_policy(password):
+            return apology("Password: '" + password + "' does not conform to policy.")
+
         elif password != confirmation:
             return apology("Passwords are NOT the same!")
 
@@ -236,6 +239,7 @@ def register():
             return redirect("/")
 
     else:
+        flash("Password must be: at least 6 characters in length, contain one lower and upper case character and one symbol and digit!")
         return render_template("register.html")
 
 
