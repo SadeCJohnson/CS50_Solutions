@@ -77,7 +77,8 @@ def validate_form_inputs(**kwargs):
 # Refer to https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
 # for ASCII character code mappings
 def is_symbol(ch):
-    pass
+    return not (is_lower_case(ch) or is_upper_case(ch) or is_number(ch))
+
 
 def is_lower_case(ch):
     return 97 <= ord(ch) <= 122
