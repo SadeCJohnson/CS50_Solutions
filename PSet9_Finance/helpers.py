@@ -119,4 +119,5 @@ def is_compliant_to_password_policy(password):
                 is_number = True
                 continue
 
-        is_symbol and is_lower_case and is_upper_case and is_number
+            if is_symbol and is_lower_case and is_upper_case and is_number: #early break if all 4 conditions are met
+                return True
