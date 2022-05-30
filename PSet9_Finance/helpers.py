@@ -63,6 +63,7 @@ def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"
 
+
 def validate_form_inputs(**kwargs):
     """Returns param key:val pair to show to apology if form is invalid"""
     for key, val in kwargs.items():
@@ -71,3 +72,47 @@ def validate_form_inputs(**kwargs):
         elif val is None:
             return key, None
     return None
+
+
+def is_symbol(ch):
+    pass
+
+
+def is_lower_case(ch):
+    pass
+
+
+def is_upper_case(ch):
+    pass
+
+
+def is_number(ch):
+    pass
+
+
+def is_compliant_to_password_policy(password):
+    """ Returns true if password is:
+        at least 6 characters in long, contains one lower and upper case character, one symbol and number"""
+    if len(password) < 6:
+        return False
+
+    else:
+        is_symbol = False
+        is_lower_case = False
+        is_upper_case = False
+        is_number = False
+
+        for ch in password:
+            if is_symbol(ch):
+                is_symbol = True
+
+            if is_lower_case(ch):
+                is_lower_case = True
+
+            if is_upper_case(ch):
+                is_upper_case = True
+
+            if is_number(ch):
+                is_number = True
+
+        is_symbol and is_lower_case and is_upper_case and is_number

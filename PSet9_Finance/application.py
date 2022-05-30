@@ -228,12 +228,6 @@ def register():
         elif password != confirmation:
             return apology("Passwords are NOT the same!")
 
-        #TODO: implement stricter password policy:
-        # (i.e. 6 characters long, at least one lower and upper, with at least one number and symbol)
-        # could write a helper function using regex or write a naive one in which each requirement is intially false
-        # then as you iterate through the list of character checking if any of the above requirements is met ... if so change flag to true and continue
-        # then finally, and all the flags and return true or false
-
         else:
             db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, generate_password_hash(password))
             #sets session id to newly inserted row in order to login user
