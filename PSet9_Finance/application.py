@@ -65,18 +65,7 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    """
-    CREATE TABLE IF NOT EXISTS transactions
-  (
-     user_id          INTEGER NOT NULL,
-     ticker_symbol    TEXT NOT NULL,
-     stock_name       TEXT NOT NULL,
-     amount           INTEGER NOT NULL,
-     purchase_price   DECIMAL(9,2) NOT NULL,
-     transaction_time DATETIME NOT NULL,
-     FOREIGN KEY(user_id) REFERENCES users (id)
-  );
-    """
+
     if request.method == 'POST':
         try:
             amt_of_shares = int(request.form.get("shares"))
@@ -112,13 +101,13 @@ def buy():
             # Transactions are not supported here since SQLite doesn't support multiple statements at once
             # https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.execute
             db.execute("UPDATE users SET cash = ? WHERE id = ?", str(round(user_balance - purchase_price, 2)), session.get("user_id"))
-            db.execute("INSERT INTO transactions VALUES(?, ?, ?, ?, ?, ?)", str(session.get("user_id")),
+            db.execute("INSERT INTO transactions VALUES(?, ?, ?, ?, ?, ?)", session.get("user_id"),
                                                                             stock_symbol,
                                                                             quote['name'],
-                                                                            str(amt_of_shares),
-                                                                            str(quote["price"]),
+                                                                            amt_of_shares,
+                                                                            quote["price"],
                                                                             datetime.now().strftime("%Y-%m-%d, %H:%M:%S"))
-            flash("Bought!")
+            flash(str(amt_of_shares) + " shares of '" + stock_symbol + "' bought successfully!")
             return redirect("/")
 
     else:
@@ -259,14 +248,16 @@ def sell():
 
         else:
             quote = lookup(ticker)
-            db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
-                                                           + ticker + "', '"
-                                                           + quote['name'] + "', '"
-                                                           + str(-1 * amount_requested) + "', '"
-                                                           + str(quote["price"]) + "', '"
-                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
+            db.execute("INSERT INTO transactions VALUES(?, ?, ?, ?, ?, ?)", session.get("user_id"),
+                                                                            ticker,
+                                                                            quote['name'],
+                                                                            -1 * amount_requested,
+                                                                            quote["price"],
+                                                                            datetime.now().strftime("%Y-%m-%d, %H:%M:%S"))
+
 
             db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(amount_requested * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
+            flash(str(amount_requested) + " shares of '" + ticker + "' sold successfully!")
             return redirect("/")
 
     else:
