@@ -219,7 +219,6 @@ def register():
         return render_template("register.html")
 
 
-#FIXME: remove all instances of concatenation to prevent sql injection attack
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
@@ -256,7 +255,11 @@ def sell():
                                                                             datetime.now().strftime("%Y-%m-%d, %H:%M:%S"))
 
 
-            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = " + str(session.get("user_id")) + ") + " + str(round(amount_requested * quote['price'], 2)) + ") WHERE id = ?", session.get("user_id"))
+            db.execute("UPDATE users SET cash = ((SELECT cash FROM users WHERE id = ? ) + ? ) WHERE id = ?",
+                                                                            session.get("user_id"),
+                                                                            round(amount_requested * quote['price'], 2),
+                                                                            session.get("user_id"))
+
             flash(str(amount_requested) + " shares of '" + ticker + "' sold successfully!")
             return redirect("/")
 
