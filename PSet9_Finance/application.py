@@ -43,8 +43,6 @@ if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
 
-
-
 @app.route("/")
 @login_required
 def index():
@@ -62,7 +60,7 @@ def index():
     portfolio_valuation += user_balance[0]['cash']
     return render_template('index.html', transactions=transactions, user_balance=round(user_balance[0]['cash'], 2), portfolio_valuation=format(round(portfolio_valuation, 2), '.2f'))
 
-#FIXME: remove all instances of concatenation to prevent sql injection attack
+
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
@@ -111,25 +109,15 @@ def buy():
             return apology("Insufficient funds!\nYou require $" + str(round(purchase_price - user_balance, 2)) + " to complete purchase.")
 
         else:
-            db.execute("UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = ?", session.get("user_id"))
-            db.execute("INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
-                                                           + stock_symbol + "', '"
-                                                           + quote['name'] + "', '"
-                                                           + str(amt_of_shares) + "', '"
-                                                           + str(quote["price"]) + "', '"
-                                                           + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "')")
-
             # Transactions are not supported here since SQLite doesn't support multiple statements at once
             # https://docs.python.org/3/library/sqlite3.html#sqlite3.Cursor.execute
-            # db.execute("BEGIN TRANSACTION;\n" +
-            #            "UPDATE users SET cash = " + str(round(user_balance - purchase_price, 2)) + " WHERE id = " + str(session.get("user_id")) + ";\n" +
-            #            "INSERT INTO transactions VALUES('" + str(session.get("user_id")) + "', '"
-            #                                                + str(1) + "', '"
-            #                                                + stock_symbol + "', '"
-            #                                                + str(amt_of_shares) + "', '"
-            #                                                + str(quote["price"]) + "', '"
-            #                                                + datetime.now().strftime("%Y-%m-%d, %H:%M:%S") + "');\n" +
-            #            "COMMIT TRANSACTION;")
+            db.execute("UPDATE users SET cash = ? WHERE id = ?", str(round(user_balance - purchase_price, 2)), session.get("user_id"))
+            db.execute("INSERT INTO transactions VALUES(?, ?, ?, ?, ?, ?)", str(session.get("user_id")),
+                                                                            stock_symbol,
+                                                                            quote['name'],
+                                                                            str(amt_of_shares),
+                                                                            str(quote["price"]),
+                                                                            datetime.now().strftime("%Y-%m-%d, %H:%M:%S"))
             flash("Bought!")
             return redirect("/")
 
