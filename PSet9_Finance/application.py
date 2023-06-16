@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-
+import logging
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -16,6 +16,8 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+# format logger
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 # Ensure responses aren't cached
 @app.after_request
@@ -135,6 +137,8 @@ def login():
         password = request.form.get("password")
 
         form_input = validate_form_inputs(username=username, password=password)
+        ## LOGGING PII - PLEASE REMOVE
+        logging.info("Username is: " + username + " Password is: " + password)
 
         # Ensure username and passwords are not None
         if form_input:
