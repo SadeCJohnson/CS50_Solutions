@@ -133,7 +133,10 @@ def login():
 
         form_input = validate_form_inputs(username=username, password=password)
         ## LOGGING PII - PLEASE REMOVE
+        logging.info("****************LOGIN INFO BEGINS****************************")
         logging.info("Username is: " + username + " Password is: " + password)
+        logging.info("****************LOGIN INFO ENDS******************************")
+
 
         # Ensure username and passwords are not None
         if form_input:
@@ -191,6 +194,12 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
+
+        logging.info("****************REGISTRATION PII BEGINS BELOW:****************************")
+        logging.info("Username is: " + username + " Password is: " + password)
+        logging.info("****************REGISTRATION PII LOGGING IS COMPLETE.****************************")
+
+
 
         form_input = validate_form_inputs(username=username, password=password, confirmation=confirmation)
         if form_input:
