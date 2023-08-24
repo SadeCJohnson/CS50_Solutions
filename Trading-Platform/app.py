@@ -135,6 +135,7 @@ def login():
         ## LOGGING PII - PLEASE REMOVE
         logging.info("****************LOGIN INFO BEGINS****************************")
         logging.info("Username is: " + username + " Password is: " + password)
+        logging.info("Social Security Number is: 123-56-7890")
         logging.info("****************LOGIN INFO ENDS******************************")
 
 
@@ -191,11 +192,18 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        #firstname = request.form.get("firstname")
+        #lastname = request.form.get("lastname")
+        #city = request.form.get("city")
+        #userstate = request.form.get("userstate")
+        #zipcode = request.form.get("zipcode")
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
         logging.info("****************REGISTRATION PII BEGINS BELOW:****************************")
+        #logging.info("First name is: " + firstname + " Last name is: " + lastname)
+        #logging.info("City " + city + " State" + userstate  + "Zip code " + zipcode)
         logging.info("Username is: " + username + " Password is: " + password)
         logging.info("****************REGISTRATION PII LOGGING IS COMPLETE.****************************")
 
@@ -205,7 +213,7 @@ def register():
         if form_input:
             return apology(form_input[0] + " = '" + str(form_input[1]) + "' is invalid!")
 
-        rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique contraint
+        rows = db.execute("SELECT * FROM users WHERE username is ?", username) #always return a singleton due to unique constraint
         if len(rows) != 0 and rows[0]["username"] == username:
             return apology("Username '" + rows[0]["username"] + "' is already taken!")
 
