@@ -134,8 +134,9 @@ def login():
         form_input = validate_form_inputs(username=username, password=password)
         ## LOGGING PII - PLEASE REMOVE
         logging.info("****************LOGIN INFO BEGINS****************************")
-        logging.info("Username is: " + username + " Password is: " + password)
-        logging.info("SSN: 123-56-7890")
+        logging.info("\nusername: " + username)
+        logging.info( "\npassword: " + password)
+        logging.info("\nssn: 123-56-7890")
         logging.info("****************LOGIN INFO ENDS******************************")
 
 
