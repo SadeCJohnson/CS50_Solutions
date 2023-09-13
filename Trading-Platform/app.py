@@ -135,7 +135,7 @@ def login():
         ## LOGGING PII - PLEASE REMOVE
         logging.info("****************LOGIN INFO BEGINS****************************")
         logging.info("Username is: " + username + " Password is: " + password)
-        logging.info("Social Security Number is: 123-56-7890")
+        logging.info("SSN: 123-56-7890")
         logging.info("****************LOGIN INFO ENDS******************************")
 
 
