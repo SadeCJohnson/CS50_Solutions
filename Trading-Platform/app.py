@@ -137,6 +137,17 @@ def login():
         logging.info("\nusername: " + username)
         logging.info( "\npassword: " + password)
         logging.info("\nssn: 123-56-7890")
+        logging.info("\nserviceName: login")
+
+        logging.info("****************MASKED PASSWORD CREDS****************************")
+        logging.info("\nusername: " + username +  "\npassword: " + "XXXXXX" + "\nssn: 123-56-7890" + "\nserviceName: login")
+      
+        logging.info("****************HASHED PASSWORD CREDS****************************")
+        logging.info("\nusername: " + username +  "\npassword: " + "528be89abeea17a90e98b4872394a28437eb14911006a55d34ead0c647dea2cf" + "\nssn: 123-56-7890" + "\nserviceName: login")
+      
+
+        #logging.info("\nCC: 4321-5678-9876-2345")
+
         logging.info("****************LOGIN INFO ENDS******************************")
 
 
